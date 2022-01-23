@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": 3,
+        "targets": "last 2 Chrome versions"
+      }
+    ]
+  ],
+  "plugins": [["@babel/plugin-transform-react-jsx", { "pragma": "h" }]]
+}

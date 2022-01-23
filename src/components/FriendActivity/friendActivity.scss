@@ -1,0 +1,241 @@
+// import /src/styles/_globals.scss.
+@import "/src/styles/globals";
+
+// Spotify's existing buddy-feed class.
+.Root__buddy-feed {
+  background-color: #000;
+
+  // Spotify's existing buddy-feed grid-area.
+  grid-area: buddy-feed;
+
+  // Spotify's existing buddy-feed-width variable.
+  width: var(--buddy-feed-width);
+
+  // Spotify's left nav bar has z-index: 3 as well.
+  z-index: 3;
+
+  .friend-activity-container {
+    padding: 16px;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 32px;
+
+      h4 {
+        color: var(--text-base, #fff);
+
+        user-select: none;
+      }
+
+      // Refresh button.
+      .refresh {
+        display: flex;
+        opacity: 0.8;
+
+        padding: 2px;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 1;
+          transform: rotate(180deg);
+          transition-duration: 0.6s;
+        }
+      }
+    }
+
+    .friends-list {
+      // Make friend list scrollable when it overflows.
+      overflow-y: auto;
+      min-height: 50px;
+      max-height: calc(100vh - 175px);
+
+      // Loading spinner container.
+      .loader-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .loader {
+          width: 40px;
+          height: 40px;
+
+          border: 4px solid var(--essential-subdued, #727272);
+          border-radius: 50%;
+          border-top: 4px solid var(--essential-positive, #1ed760);
+
+          animation: spin 1.5s linear infinite;
+        }
+
+        // Loading spinner keyframes. (For the animation)
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      }
+
+      .friend {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+
+        margin-bottom: 30px;
+
+        .user-icon-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          margin-top: 4px;
+
+          user-select: none;
+          cursor: pointer;
+
+          // Show play icon over user icon on hover.
+          &:hover {
+            & .user-play-icon {
+              width: 12px;
+              height: 12px;
+
+              display: inline;
+
+              position: absolute;
+
+              box-sizing: border-box;
+              border-style: solid;
+              border-width: 6px 0px 6px 12px;
+              border-color: transparent transparent transparent
+                var(--text-base, #fff);
+            }
+
+            & .user-icon {
+              opacity: 0.5;
+            }
+          }
+
+          .user-icon {
+            border-radius: 50%;
+          }
+
+          .user-play-icon {
+            display: none;
+          }
+        }
+
+        // Badge over user icon to indicate online status.
+        .online-badge-container {
+          width: 0;
+          height: 0;
+
+          position: relative;
+
+          .online-badge {
+            background-color: var(--online-badge, #2e77d0);
+
+            width: 8px;
+            height: 8px;
+
+            position: absolute;
+            left: -8px;
+            top: 6px;
+
+            border-radius: 50%;
+          }
+        }
+
+        .friend-info {
+          width: 100%;
+          margin-left: 10px;
+
+          .username-and-time {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .username {
+              font-size: 14px;
+              font-weight: 700;
+
+              cursor: pointer;
+
+              color: var(--text-gray, #b3b3b3);
+
+              &:hover {
+                color: var(--text-base, #fff);
+              }
+            }
+
+            .time {
+              font-size: 12px;
+            }
+          }
+
+          .track-and-artist {
+            max-width: 188px;
+
+            display: flex;
+            align-items: center;
+
+            font-size: 12px;
+
+            .track-info {
+              display: inline-block;
+
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+
+              color: var(--text-gray, #b3b3b3);
+
+              cursor: pointer;
+
+              &:hover {
+                color: var(--text-base, #fff);
+              }
+            }
+
+            .bullet-separator {
+              color: var(--text-base, #fff);
+
+              white-space: pre;
+
+              cursor: default;
+            }
+          }
+
+          .context-container {
+            display: flex;
+            align-items: center;
+
+            color: var(--text-gray, #b3b3b3);
+            font-size: 12px;
+
+            cursor: pointer;
+
+            &:hover {
+              color: var(--text-base, #fff);
+            }
+
+            .context-name {
+              max-width: 170px;
+
+              display: inline-block;
+
+              margin-left: 6px;
+
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
+  }
+}

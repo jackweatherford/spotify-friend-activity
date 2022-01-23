@@ -1,0 +1,44 @@
+{
+  "name": "spotify-friend-activity",
+  "version": "1.0.0",
+  "description": "Google Chrome Extension to view your friends' activity in Spotify's web player",
+  "scripts": {
+    "build": "rm -rf ./dist && webpack && npm run copy:dist",
+    "copy:dist": "cp ./src/components/popup/popup.html manifest.json ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackweatherford/spotify-friend-activity.git"
+  },
+  "keywords": [
+    "spotify",
+    "friend",
+    "activity"
+  ],
+  "author": "Jack Weatherford <jack.weatherford@gmail.com> (http://jackweatherford.github.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jackweatherford/spotify-friend-activity/issues"
+  },
+  "homepage": "https://github.com/jackweatherford/spotify-friend-activity#readme",
+  "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@babel/plugin-transform-react-jsx": "^7.16.7",
+    "@babel/preset-env": "^7.16.8",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.2.3",
+    "copy-webpack-plugin": "^10.2.0",
+    "css-loader": "^6.5.1",
+    "sass": "^1.47.0",
+    "sass-loader": "^12.4.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "preact": "^10.6.4",
+    "regenerator-runtime": "^0.13.9",
+    "spotify-buddylist": "^1.0.0",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}
