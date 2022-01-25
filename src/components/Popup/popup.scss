@@ -97,5 +97,20 @@ body {
         color: var(--essential-positive, #1ed760);
       }
     }
+
+    // Bottom icons.
+    .footer-icons-container {
+      display: flex;
+      align-items: center;
+
+      margin-top: 20px;
+
+      & :not(:first-of-type) {
+        margin-left: 4px;
+      }
+      & :not(:last-of-type) {
+        margin-right: 4px;
+      }
+    }
   }
 }

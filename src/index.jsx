@@ -74,7 +74,7 @@ const initDisplay = () => {
 
   // Get isDisplayed from chrome local storage.
   chrome.storage.sync.get("isDisplayed", (store) => {
-    // If isDisplayed has never been set. (the user hasn't clicked the "Show friend activity" toggle yet)
+    // If isDisplayed has never been set. (The user hasn't clicked the "Show friend activity" toggle yet)
     if (store.isDisplayed === undefined) {
       toggleFriendActivity(true);
     } else {

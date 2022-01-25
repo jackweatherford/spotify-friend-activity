@@ -16,7 +16,7 @@ const Popup = () => {
   useEffect(() => {
     // Get isDisplayed from chrome local storage.
     chrome.storage.sync.get("isDisplayed", (store) => {
-      // If isDisplayed has never been set. (the user hasn't clicked the "Show friend activity" toggle yet)
+      // If isDisplayed has never been set. (The user hasn't clicked the "Show friend activity" toggle yet)
       if (store.isDisplayed === undefined) {
         setIsDisplayed(true);
       } else {
@@ -62,13 +62,20 @@ const Popup = () => {
         </a>
         .
       </p>
-      <a
-        style={{ marginTop: 20 }}
-        href="https://github.com/jackweatherford/spotify-friend-activity"
-        target="_blank"
-      >
-        <img width={24} height={24} src="../../images/github.png" />
-      </a>
+      <div class="footer-icons-container">
+        <a
+          href="https://github.com/jackweatherford/spotify-friend-activity"
+          target="_blank"
+        >
+          <img width={24} height={24} src="../../images/github.png" />
+        </a>
+        <a
+          href="https://chrome.google.com/webstore/detail/spotify-friend-activity/amlnlcdighbhfciijpnofbpphfnkmeaa"
+          target="_blank"
+        >
+          <img width={24} height={21} src="../../images/chrome-web-store.png" />
+        </a>
+      </div>
     </Fragment>
   );
 };
