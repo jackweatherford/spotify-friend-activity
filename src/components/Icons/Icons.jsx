@@ -26,7 +26,7 @@ export const RefreshIcon = () => {
  * Icon for displaying a user's avatar.
  *
  * @param {object} props UserIcon properties.
- * @param {string} props.src User avatar source uri.
+ * @param {string} props.src User avatar source URI.
  * @returns {JSX.Element} User icon.
  */
 export const UserIcon = (props) => {

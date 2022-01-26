@@ -78,17 +78,20 @@ export const FriendActivity = () => {
             // Determine online status of friend.
             const online = seconds <= 300 ? true : false;
 
-            // Determine which context type the track is in. (playlist, album, or artist)
-            const contextType = track.context.uri.split(":")[1];
+            // Get track ID.
+            const trackID = track.uri.split(":").pop();
+
+            // Get context type (playlist, album, or artist) and context ID.
+            const contextURI = track.context.uri.split(":");
+            const contextID = contextURI.pop();
+            const contextType = contextURI.pop();
 
             return (
               <div class="friend">
                 <a
                   class="user-icon-container"
                   title={"Play " + track.artist.name + " " + track.name}
-                  href={
-                    "https://open.spotify.com/track/" + track.uri.split(":")[2]
-                  }
+                  href={"https://open.spotify.com/track/" + trackID}
                 >
                   <UserIcon src={user.imageUrl} />
                   <div class="user-play-icon" />
@@ -105,7 +108,7 @@ export const FriendActivity = () => {
                       title={user.name}
                       href={
                         "https://open.spotify.com/user/" +
-                        user.uri.split(":")[2]
+                        user.uri.split(":").pop()
                       }
                     >
                       {user.name}
@@ -120,10 +123,7 @@ export const FriendActivity = () => {
                     <a
                       class="track-info"
                       title={track.name}
-                      href={
-                        "https://open.spotify.com/track/" +
-                        track.uri.split(":")[2]
-                      }
+                      href={"https://open.spotify.com/track/" + trackID}
                     >
                       {track.name}
                     </a>
@@ -133,7 +133,7 @@ export const FriendActivity = () => {
                       title={track.artist.name}
                       href={
                         "https://open.spotify.com/artist/" +
-                        track.artist.uri.split(":")[2]
+                        track.artist.uri.split(":").pop()
                       }
                     >
                       {track.artist.name}
@@ -146,7 +146,7 @@ export const FriendActivity = () => {
                       "https://open.spotify.com/" +
                       contextType +
                       "/" +
-                      track.context.uri.split(":")[2]
+                      contextID
                     }
                   >
                     {contextType == "playlist" ? (
