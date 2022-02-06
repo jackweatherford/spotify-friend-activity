@@ -92,6 +92,7 @@ export const FriendActivity = () => {
                   class="user-icon-container"
                   title={"Play " + track.artist.name + " " + track.name}
                   href={"https://open.spotify.com/track/" + trackID}
+                  target="_blank"
                 >
                   <UserIcon src={user.imageUrl} />
                   <div class="user-play-icon" />
@@ -110,6 +111,7 @@ export const FriendActivity = () => {
                         "https://open.spotify.com/user/" +
                         user.uri.split(":").pop()
                       }
+                      target="_blank"
                     >
                       {user.name}
                     </a>
@@ -124,6 +126,7 @@ export const FriendActivity = () => {
                       class="track-info"
                       title={track.name}
                       href={"https://open.spotify.com/track/" + trackID}
+                      target="_blank"
                     >
                       {track.name}
                     </a>
@@ -135,6 +138,7 @@ export const FriendActivity = () => {
                         "https://open.spotify.com/artist/" +
                         track.artist.uri.split(":").pop()
                       }
+                      target="_blank"
                     >
                       {track.artist.name}
                     </a>
@@ -148,6 +152,7 @@ export const FriendActivity = () => {
                       "/" +
                       contextID
                     }
+                    target="_blank"
                   >
                     {contextType == "playlist" ? (
                       <PlaylistIcon />
