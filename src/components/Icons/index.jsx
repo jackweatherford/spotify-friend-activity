@@ -47,6 +47,8 @@ export const UserIcon = (props) => {
 /**
  * Display this icon when the user is listening to music.
  *
+ * @param {object} props EqualizerIcon properties.
+ * @param {string} props.title Tooltip that displays when the user hovers over the icon.
  * @returns {JSX.Element} Equalizer icon.
  */
 export const EqualizerIcon = (props) => {
