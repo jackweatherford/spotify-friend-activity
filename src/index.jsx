@@ -4,7 +4,7 @@ import "regenerator-runtime/runtime";
 import { render } from "preact";
 
 // The column that displays your Spotify friends' activity.
-import { FriendActivity } from "./components/FriendActivity/FriendActivity";
+import { FriendActivity } from "./components/FriendActivity";
 
 /**
  * Toggles the FriendActivity component on or off depending on toggleOn.

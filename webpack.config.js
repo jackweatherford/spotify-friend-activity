@@ -9,7 +9,7 @@ module.exports = {
   mode: "production",
   entry: {
     index: "./src/index.jsx",
-    Popup: "./src/components/Popup/Popup.jsx",
+    popup: "./src/components/Popup/index.jsx",
   },
   output: {
     filename: "[name].js",
