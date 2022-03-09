@@ -124,7 +124,13 @@ export const FriendActivity = () => {
                           "Last Active: " +
                           new Date(
                             Math.round(timestamp / 60000) * 60000
-                          ).toLocaleString()
+                          ).toLocaleString([], {
+                            year: "2-digit",
+                            month: "numeric",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
                         }
                       >
                         {formatTime(seconds)}
