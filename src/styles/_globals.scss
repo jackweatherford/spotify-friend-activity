@@ -11,8 +11,6 @@
 }
 
 // Fix bottom play bar cut off on small height screens.
-@media (max-height: 600px) {
-  .Root__now-playing-bar {
-    min-height: calc(691px - 100vh);
-  }
+.Root__now-playing-bar {
+  min-height: calc(691px - 100vh);
 }
