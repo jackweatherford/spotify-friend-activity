@@ -15,14 +15,14 @@
   z-index: 3;
 
   .friend-activity-container {
-    padding: 1rem;
+    padding: 1rem 0 1rem 1rem;
 
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      margin-bottom: 2rem;
+      margin: 0 1rem 2rem 0;
 
       h1 {
         font-size: 1rem;
@@ -53,6 +53,8 @@
       overflow-y: auto;
       min-height: 3.125rem;
       max-height: calc(100vh - 10.875rem);
+
+      padding-right: 1rem;
 
       // Loading spinner container.
       .loader-container {
