@@ -82,8 +82,11 @@ export const FriendActivity = () => {
             // Context URL.
             const contextURL = `https://open.spotify.com/${contextType}/${contextID}`;
 
-            // Track URL that highlights the track within its context.
-            const trackURL = `${contextURL}?highlight=spotify:track:${trackID}`;
+            // Track URL that highlights the track within its album if possible.
+            const trackURL =
+              contextType == "album"
+                ? `${contextURL}?highlight=spotify:track:${trackID}`
+                : `https://open.spotify.com/track/${trackID}`;
 
             return (
               <div class="friend">
