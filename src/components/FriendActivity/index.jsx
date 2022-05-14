@@ -32,14 +32,14 @@ const formatTime = (time) => {
     time = Math.round(time / duration.value);
 
     if (time < durations[i + 1].value) {
-      return time + " " + duration.unit;
+      return `${time} ${duration.unit}`;
     }
   }
 
   const lastDuration = durations[durations.length - 1];
   time = Math.round(time / lastDuration.value);
 
-  return time + " " + lastDuration.unit;
+  return `${time} ${lastDuration.unit}`;
 };
 
 /**
@@ -50,18 +50,11 @@ const formatTime = (time) => {
 export const FriendActivity = () => {
   const { friendActivity, loading, refetch } = useFriendActivity();
 
-  // TODO: Add resizer - something like this:
-  // <div class="layout-resizer" style="z-index: 1;">
-  //   <label class="hidden-visually">
-  //     <input class="layout-resizer-input" type="range" min="120" max="380" step="10" value="270" />
-  //   </label>
-  // </div>
-
   return (
     <div class="friend-activity-container">
       <div class="header">
         <h1>Friend activity</h1>
-        <div class="refresh" onClick={refetch}>
+        <div class="refresh" title="Refresh" onClick={refetch}>
           <RefreshIcon />
         </div>
       </div>
@@ -86,12 +79,18 @@ export const FriendActivity = () => {
             const contextID = contextURI.pop();
             const contextType = contextURI.pop();
 
+            // Context URL.
+            const contextURL = `https://open.spotify.com/${contextType}/${contextID}`;
+
+            // Track URL that highlights the track within its context.
+            const trackURL = `${contextURL}?highlight=spotify:track:${trackID}`;
+
             return (
               <div class="friend">
                 <a
                   class="user-icon-container"
-                  title={"Play " + track.artist.name + " " + track.name}
-                  href={"https://open.spotify.com/track/" + trackID}
+                  title={`Play ${track.artist.name} ${track.name}`}
+                  href={trackURL}
                   target="_blank"
                 >
                   <UserIcon src={user.imageUrl} alt={user.name} />
@@ -107,10 +106,9 @@ export const FriendActivity = () => {
                     <a
                       class="username"
                       title={user.name}
-                      href={
-                        "https://open.spotify.com/user/" +
-                        user.uri.split(":").pop()
-                      }
+                      href={`https://open.spotify.com/user/${user.uri
+                        .split(":")
+                        .pop()}`}
                       target="_blank"
                     >
                       {user.name}
@@ -120,18 +118,15 @@ export const FriendActivity = () => {
                     ) : (
                       <span
                         class="time"
-                        title={
-                          "Last Active: " +
-                          new Date(
-                            Math.round(timestamp / 60000) * 60000
-                          ).toLocaleString([], {
-                            year: "2-digit",
-                            month: "numeric",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        }
+                        title={`Last Active: ${new Date(
+                          Math.round(timestamp / 60000) * 60000
+                        ).toLocaleString([], {
+                          year: "2-digit",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}`}
                       >
                         {formatTime(seconds)}
                       </span>
@@ -141,7 +136,7 @@ export const FriendActivity = () => {
                     <a
                       class="track-info"
                       title={track.name}
-                      href={"https://open.spotify.com/track/" + trackID}
+                      href={trackURL}
                       target="_blank"
                     >
                       {track.name}
@@ -150,10 +145,9 @@ export const FriendActivity = () => {
                     <a
                       class="track-info"
                       title={track.artist.name}
-                      href={
-                        "https://open.spotify.com/artist/" +
-                        track.artist.uri.split(":").pop()
-                      }
+                      href={`https://open.spotify.com/artist/${track.artist.uri
+                        .split(":")
+                        .pop()}`}
                       target="_blank"
                     >
                       {track.artist.name}
@@ -162,12 +156,7 @@ export const FriendActivity = () => {
                   <a
                     class="context-container"
                     title={track.context.name}
-                    href={
-                      "https://open.spotify.com/" +
-                      contextType +
-                      "/" +
-                      contextID
-                    }
+                    href={contextURL}
                     target="_blank"
                   >
                     {contextType == "playlist" ? (
