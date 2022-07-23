@@ -15,7 +15,7 @@ const toggleFriendActivity = async (toggleOn) => {
   // Wait for topContainer (an existing Spotify DOM element) to render.
   const topContainer = await waitUntilRender("Root__top-container");
   topContainer.style["grid-template-areas"] =
-    '"nav-bar         main-view       buddy-feed" "now-playing-bar now-playing-bar now-playing-bar"';
+    '"top-bar top-bar top-bar" "nav-bar main-view buddy-feed" "now-playing-bar now-playing-bar now-playing-bar"';
 
   // Get buddyFeed. (an existing Spotify DOM element)
   let buddyFeed = document.getElementsByClassName("Root__buddy-feed")[0];
