@@ -12,17 +12,18 @@ import { FriendActivity } from "./components/FriendActivity";
  * @param {bool} toggleOn Whether to toggle the FriendActivity on or off.
  */
 const toggleFriendActivity = async (toggleOn) => {
-  // Wait for topContainer (an existing Spotify DOM element) to render.
+  // Wait for the .Root__top-container div (an existing Spotify DOM element) to render.
   const topContainer = await waitUntilRender("Root__top-container");
-  topContainer.style["grid-template-areas"] =
-    '"top-bar top-bar top-bar" "nav-bar main-view buddy-feed" "now-playing-bar now-playing-bar now-playing-bar"';
 
-  // Get buddyFeed. (an existing Spotify DOM element)
-  let buddyFeed = document.getElementsByClassName("Root__buddy-feed")[0];
+  // If FriendActivity needs to toggle on.
+  if (toggleOn) {
+    // Add a buddy-feed grid-area in the container grid.
+    topContainer.style.setProperty(
+      "grid-template-areas",
+      '"top-bar top-bar top-bar" "nav-bar main-view buddy-feed" "now-playing-bar now-playing-bar now-playing-bar"'
+    );
 
-  // If buddyFeed doesn't exist and FriendActivity needs to toggle on.
-  if (!buddyFeed && toggleOn) {
-    buddyFeed = document.createElement("div");
+    const buddyFeed = document.createElement("div");
     buddyFeed.classList.add("Root__buddy-feed");
 
     // Add buddyFeed as a child of topContainer.
@@ -30,9 +31,17 @@ const toggleFriendActivity = async (toggleOn) => {
 
     // Inject FriendActivity into buddyFeed.
     render(<FriendActivity />, buddyFeed);
-  } else if (buddyFeed && !toggleOn) {
-    // Else if buddyFeed exists and FriendActivity needs to toggle off.
-    buddyFeed.remove();
+  } else {
+    // Else FriendActivity needs to toggle off.
+    const buddyFeed = document.getElementsByClassName("Root__buddy-feed")[0];
+
+    if (buddyFeed) {
+      // Clear buddy-feed from the grid-area, will revert back to Spotify's grid.
+      topContainer.style.removeProperty("grid-template-areas");
+
+      // Remove the buddyFeed element from the DOM.
+      buddyFeed.remove();
+    }
   }
 };
 

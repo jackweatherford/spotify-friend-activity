@@ -1,17 +1,20 @@
 // import /src/styles/_globals.scss.
 @import "/src/styles/globals";
 
-// Spotify's existing buddy-feed class.
+// Spotify's class naming convention for a buddy-feed.
 .Root__buddy-feed {
   background-color: #000;
 
-  // Spotify's existing buddy-feed grid-area.
+  // Position in the buddy-feed grid-area.
   grid-area: buddy-feed;
 
-  // Spotify's existing buddy-feed-width variable.
-  width: var(--buddy-feed-width);
+  // Use Spotify's buddy-feed-width variable, or if it doesn't exist: 270px.
+  width: var(--buddy-feed-width, 270px);
 
-  // Spotify's left nav bar has z-index: 3 as well.
+  // Insure the buddy feed's height stays within the bounds of the main grid if it overflows.
+  min-height: 0;
+
+  // Spotify's left nav bar (.Root__nav-bar) has z-index: 3 as well.
   z-index: 3;
 
   .friend-activity-container {
