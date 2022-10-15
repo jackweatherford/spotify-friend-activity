@@ -92,27 +92,6 @@ const initDisplay = async () => {
       toggleFriendActivity(store.isDisplayed);
     }
   });
-
-  // Wait for "Now Playing" footer (an existing Spotify DOM element) to render.
-  const nowPlaying = await waitUntilRender("Root__now-playing-bar");
-
-  // Update nowPlaying min-height if "Listening on..." banner is present.
-  const updateNowPlayingMinHeight = (mutationList) => {
-    // If "Listening on..." banner was just added.
-    if (mutationList[0]?.addedNodes.length) {
-      // Increase nowPlaying min-height to account for "Listening on..." banner's additional height.
-      nowPlaying.style["min-height"] = "calc(715px - 100vh)";
-    } else if (mutationList[0]?.removedNodes.length) {
-      // Reset nowPlaying min-height.
-      nowPlaying.style["min-height"] = "";
-    }
-  };
-
-  // Bind updateNowPlayingMinHeight() to footer mutation event.
-  const footerObserver = new MutationObserver(updateNowPlayingMinHeight);
-  footerObserver.observe(document.querySelector("footer"), {
-    childList: true,
-  });
 };
 
 // If the document is already loaded.

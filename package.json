@@ -1,6 +1,6 @@
 {
   "name": "spotify-friend-activity",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Google Chrome Extension to view your friends' activity in Spotify's web player",
   "scripts": {
     "build": "rm -rf ./dist && webpack && npm run copy:dist",
@@ -22,22 +22,22 @@
   },
   "homepage": "https://github.com/jackweatherford/spotify-friend-activity#readme",
   "devDependencies": {
-    "@babel/core": "^7.19.0",
+    "@babel/core": "^7.19.3",
     "@babel/plugin-transform-react-jsx": "^7.19.0",
-    "@babel/preset-env": "^7.19.0",
+    "@babel/preset-env": "^7.19.4",
     "babel": "^6.23.0",
     "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
-    "sass": "^1.54.9",
-    "sass-loader": "^13.0.2",
+    "sass": "^1.55.0",
+    "sass-loader": "^13.1.0",
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "preact": "^10.10.6",
-    "regenerator-runtime": "^0.13.9",
+    "preact": "^10.11.2",
+    "regenerator-runtime": "^0.13.10",
     "spotify-buddylist": "^1.0.0",
     "spotify-web-api-node": "^5.0.2"
   }
