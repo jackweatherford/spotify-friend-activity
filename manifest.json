@@ -1,8 +1,8 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Spotify Friend Activity",
   "version": "1.0.12",
-  "action": {
+  "page_action": {
     "default_icon": {
       "16": "images/sfa16.png",
       "24": "images/sfa24.png",
@@ -23,6 +23,9 @@
       "js": ["index.js"]
     }
   ],
-  "host_permissions": ["https://open.spotify.com/*"],
-  "permissions": ["storage"]
+  "permissions": [
+    "storage",
+    "https://open.spotify.com/*",
+    "https://guc-spclient.spotify.com/*"
+  ]
 }

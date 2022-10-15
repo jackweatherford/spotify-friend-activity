@@ -5,7 +5,7 @@
       {
         "useBuiltIns": "entry",
         "corejs": 3,
-        "targets": "last 2 Chrome versions"
+        "targets": "last 2 Firefox versions"
       }
     ]
   ],

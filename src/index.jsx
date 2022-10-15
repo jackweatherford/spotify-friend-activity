@@ -77,16 +77,16 @@ const waitUntilRender = (className) => {
 // Initial display render.
 const initDisplay = async () => {
   // Listener that calls toggleFriendActivity when isDisplayed changes.
-  chrome.storage.onChanged.addListener((changes) => {
+  browser.storage.onChanged.addListener((changes) => {
     if ("isDisplayed" in changes) {
       toggleFriendActivity(changes.isDisplayed.newValue);
     }
   });
 
-  // Get isDisplayed from chrome local storage.
-  chrome.storage.sync.get("isDisplayed", (store) => {
+  // Get isDisplayed from browser local storage.
+  browser.storage.sync.get("isDisplayed", (store) => {
     // If isDisplayed has never been set. (The user hasn't clicked the "Show friend activity" toggle yet)
-    if (store.isDisplayed === undefined) {
+    if (store?.isDisplayed === undefined) {
       toggleFriendActivity(true);
     } else {
       toggleFriendActivity(store.isDisplayed);

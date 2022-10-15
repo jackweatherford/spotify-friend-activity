@@ -1,7 +1,7 @@
 {
   "name": "spotify-friend-activity",
   "version": "1.0.12",
-  "description": "Google Chrome Extension to view your friends' activity in Spotify's web player",
+  "description": "Firefox Add-on to view your friends' activity in Spotify's web player",
   "scripts": {
     "build": "rm -rf ./dist && webpack && npm run copy:dist",
     "copy:dist": "cp ./src/components/popup/popup.html manifest.json ./dist"

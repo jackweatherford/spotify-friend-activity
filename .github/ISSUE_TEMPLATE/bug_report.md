@@ -28,7 +28,7 @@ If applicable, add screenshots to help explain your problem.
 
 - Operating System: [e.g. Windows]
 - Screen Resolution: [e.g. 1920x1080]
-- Chrome Version: [e.g. 98]
+- Firefox Version: [e.g. 104]
 
 **Additional context**
 Add any other context about the problem here.

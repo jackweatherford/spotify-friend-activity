@@ -5,7 +5,7 @@ import { useState, useEffect } from "preact/hooks";
 import "./popup.scss";
 
 /**
- * The Spotify Friend Activity extension's popup.
+ * The Spotify Friend Activity Add-on's popup.
  *
  * @returns {JSX.Element} The popup.
  */
@@ -14,8 +14,8 @@ const Popup = () => {
   const [isDisplayed, setIsDisplayed] = useState();
 
   useEffect(() => {
-    // Get isDisplayed from chrome local storage.
-    chrome.storage.sync.get("isDisplayed", (store) => {
+    // Get isDisplayed from browser local storage.
+    browser.storage.sync.get("isDisplayed", (store) => {
       // If isDisplayed has never been set. (The user hasn't clicked the "Show friend activity" toggle yet)
       if (store.isDisplayed === undefined) {
         setIsDisplayed(true);
@@ -29,8 +29,8 @@ const Popup = () => {
   const handleToggleChange = (e) => {
     const isDisplayed = e.target.checked;
 
-    // Set isDisplayed in chrome local storage.
-    chrome.storage.sync.set({ isDisplayed });
+    // Set isDisplayed in browser local storage.
+    browser.storage.sync.set({ isDisplayed });
 
     setIsDisplayed(isDisplayed);
   };
@@ -83,16 +83,12 @@ const Popup = () => {
             alt="GitHub Icon"
           />
         </a>
-        <a
-          href="https://chrome.google.com/webstore/detail/spotify-friend-activity/amlnlcdighbhfciijpnofbpphfnkmeaa"
-          target="_blank"
-          title="Chrome Web Store Page"
-        >
+        <a href="" target="_blank" title="Firefox Add-on Page">
           <img
             width={24}
-            height={21}
-            src="../../images/chrome-web-store.png"
-            alt="Chrome Web Store Icon"
+            height={24}
+            src="../../images/firefox-addon.ico"
+            alt="Firefox Add-on Icon"
           />
         </a>
       </div>
