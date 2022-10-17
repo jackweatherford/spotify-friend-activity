@@ -83,7 +83,11 @@ const Popup = () => {
             alt="GitHub Icon"
           />
         </a>
-        <a href="" target="_blank" title="Firefox Add-on Page">
+        <a
+          href="https://addons.mozilla.org/en-US/firefox/addon/spotify-friend-activity/"
+          target="_blank"
+          title="Firefox Add-on Page"
+        >
           <img
             width={24}
             height={24}

@@ -4,7 +4,7 @@ Firefox Add-on to view your friends' activity in Spotify's web player.
 
 ## Add to Firefox (latest release)
 
-Add the Add-on to your browser from the Firefox Add-ons Page (Coming soon).
+Add the Add-on to your browser from the [Firefox Add-ons Page](https://addons.mozilla.org/en-US/firefox/addon/spotify-friend-activity/).
 
 ## Or build it yourself (latest dev build)
 
