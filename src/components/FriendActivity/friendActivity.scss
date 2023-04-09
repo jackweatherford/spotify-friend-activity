@@ -5,11 +5,7 @@
 .Root__buddy-feed {
   background-color: #000;
 
-  // Position in the buddy-feed grid-area.
-  grid-area: buddy-feed;
-
-  // Use Spotify's buddy-feed-width variable, or if it doesn't exist: 270px.
-  width: var(--buddy-feed-width, 270px);
+  width: 270px;
 
   // Insure the buddy feed's height stays within the bounds of the main grid if it overflows.
   min-height: 0;
