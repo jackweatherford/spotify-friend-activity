@@ -12,35 +12,41 @@ import { FriendActivity } from "./components/FriendActivity";
  * @param {bool} toggleOn Whether to toggle the FriendActivity on or off.
  */
 const toggleFriendActivity = async (toggleOn) => {
-  // Wait for the .Root__top-container div (an existing Spotify DOM element) to render.
-  const topContainer = await waitUntilRender("Root__top-container");
+  // Wait for the .Root__main-view div (an existing Spotify DOM element) to render.
+  const mainView = await waitUntilRender("Root__main-view");
+
+  // Wait for the .Root__top-bar div (an existing Spotify DOM element) to render.
+  const topBar = await waitUntilRender("Root__top-bar");
 
   // If FriendActivity needs to toggle on.
   if (toggleOn) {
-    // Add a buddy-feed grid-area in the container grid.
-    topContainer.style.setProperty(
-      "grid-template-areas",
-      '"top-bar top-bar top-bar" "nav-bar main-view buddy-feed" "now-playing-bar now-playing-bar now-playing-bar"'
-    );
+    // Update mainView so that buddyFeed displays on the right side.
+    mainView.style.setProperty("flex-direction", "row");
 
     const buddyFeed = document.createElement("div");
     buddyFeed.classList.add("Root__buddy-feed");
 
-    // Add buddyFeed as a child of topContainer.
-    topContainer.appendChild(buddyFeed);
+    // Add buddyFeed as a child of mainView.
+    mainView.appendChild(buddyFeed);
 
     // Inject FriendActivity into buddyFeed.
     render(<FriendActivity />, buddyFeed);
+
+    // Give more space to the right of the topBar for the buddyFeed to take up.
+    topBar.style.setProperty("margin-right", "270px");
   } else {
     // Else FriendActivity needs to toggle off.
     const buddyFeed = document.getElementsByClassName("Root__buddy-feed")[0];
 
     if (buddyFeed) {
-      // Clear buddy-feed from the grid-area, will revert back to Spotify's grid.
-      topContainer.style.removeProperty("grid-template-areas");
+      // Clear custom styling - "flex-direction: column;" will revert back to "flex-direction: row;"
+      mainView.style.removeProperty("flex-direction");
 
       // Remove the buddyFeed element from the DOM.
       buddyFeed.remove();
+
+      // Clear custom styling - "margin-right: 270px;" will revert back to "margin-right: 0;"
+      topBar.style.removeProperty("margin-right");
     }
   }
 };

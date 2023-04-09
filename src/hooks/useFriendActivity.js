@@ -23,11 +23,28 @@ export const useFriendActivity = () => {
   const [friendActivity, setFriendActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
+  const [accessToken, setAccessToken] = useState("");
 
-  // Run refetch on first render to get initial data.
-  useEffect(() => {
-    refetch();
+  // Setup Spotify API access token on first render.
+  useEffect(async () => {
+    // Cookie will be populated on Spotify user login.
+    let spDcCookie;
+    // Get Spotify API access token.
+    try {
+      const response = await getWebAccessToken(spDcCookie);
+      setAccessToken(response.accessToken);
+    } catch (e) {
+      console.log("[ERROR] [Spotify Friend Activity]", e);
+      setErrors((oldErrors) => [...oldErrors, e]);
+    }
   }, []);
+
+  // After Spotify API access token is set, fetch friend activity for the first time.
+  useEffect(() => {
+    if (accessToken) {
+      refetch();
+    }
+  }, [accessToken]);
 
   // Poll the API every minute.
   useInterval(() => {
@@ -36,18 +53,6 @@ export const useFriendActivity = () => {
 
   // Fetch and update state.
   const fetchFriendActivity = async () => {
-    // Cookie will be populated on Spotify user login.
-    let spDcCookie;
-    // Get Spotify API access token.
-    let accessToken;
-    try {
-      const response = await getWebAccessToken(spDcCookie);
-      accessToken = response.accessToken;
-    } catch (e) {
-      console.log("[ERROR] [Spotify Friend Activity]", e);
-      setErrors((oldErrors) => [...oldErrors, e]);
-    }
-
     // Get Spotify friend activity.
     let friendActivity;
     try {
