@@ -13,10 +13,12 @@ import { FriendActivity } from "./components/FriendActivity";
  */
 const toggleFriendActivity = async (toggleOn) => {
   // Wait for the .Root__main-view div (an existing Spotify DOM element) to render.
-  const mainView = await waitUntilRender("Root__main-view");
+  const mainView = await waitUntilRender(".Root__main-view");
 
-  // Wait for the .Root__top-bar div (an existing Spotify DOM element) to render.
-  const topBar = await waitUntilRender("Root__top-bar");
+  // Wait for the header[aria-label="Top bar and user menu"] (an existing Spotify DOM element) to render.
+  const topBar = await waitUntilRender(
+    'header[aria-label="Top bar and user menu"]'
+  );
 
   // If FriendActivity needs to toggle on.
   if (toggleOn) {
@@ -33,7 +35,7 @@ const toggleFriendActivity = async (toggleOn) => {
     render(<FriendActivity />, buddyFeed);
 
     // Give more space to the right of the topBar for the buddyFeed to take up.
-    topBar.style.setProperty("margin-right", "270px");
+    topBar.style.setProperty("padding-right", "286px");
   } else {
     // Else FriendActivity needs to toggle off.
     const buddyFeed = document.getElementsByClassName("Root__buddy-feed")[0];
@@ -45,28 +47,28 @@ const toggleFriendActivity = async (toggleOn) => {
       // Remove the buddyFeed element from the DOM.
       buddyFeed.remove();
 
-      // Clear custom styling - "margin-right: 270px;" will revert back to "margin-right: 0;"
-      topBar.style.removeProperty("margin-right");
+      // Clear custom styling - "padding-right: 286px;" will revert back to "padding-right: 24px;"
+      topBar.style.removeProperty("padding-right");
     }
   }
 };
 
 /**
- * Waits for an element with className to render.
+ * Waits for an element to render specified by query.
  * Ref: https://stackoverflow.com/a/61511955.
  *
- * @param {string} className The class name of the element to wait for.
+ * @param {string} query The css selector of the element to wait for.
  * @returns {Promise} Promise object representing the found element.
  */
-const waitUntilRender = (className) => {
+const waitUntilRender = (query) => {
   return new Promise((resolve) => {
-    const element = document.getElementsByClassName(className)[0];
+    const element = document.querySelector(query);
     if (element) {
       return resolve(element);
     }
 
     const observer = new MutationObserver(() => {
-      const element = document.getElementsByClassName(className)[0];
+      const element = document.querySelector(query);
       if (element) {
         resolve(element);
         observer.disconnect();
