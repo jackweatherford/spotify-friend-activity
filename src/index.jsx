@@ -15,10 +15,8 @@ const toggleFriendActivity = async (toggleOn) => {
   // Wait for the .Root__main-view div (an existing Spotify DOM element) to render.
   const mainView = await waitUntilRender(".Root__main-view");
 
-  // Wait for the header[aria-label="Top bar and user menu"] (an existing Spotify DOM element) to render.
-  const topBar = await waitUntilRender(
-    'header[aria-label="Top bar and user menu"]'
-  );
+  // Wait for the top bar header (an existing Spotify DOM element) to render.
+  const topBar = await waitUntilRender("header");
 
   // If FriendActivity needs to toggle on.
   if (toggleOn) {
