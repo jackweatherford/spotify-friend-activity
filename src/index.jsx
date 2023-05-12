@@ -12,41 +12,43 @@ import { FriendActivity } from "./components/FriendActivity";
  * @param {bool} toggleOn Whether to toggle the FriendActivity on or off.
  */
 const toggleFriendActivity = async (toggleOn) => {
-  // Wait for the .Root__main-view div (an existing Spotify DOM element) to render.
-  const mainView = await waitUntilRender(".Root__main-view");
+  // Wait for the .main-view-container div (an existing Spotify DOM element) to render.
+  const mainView = await waitUntilRender(".main-view-container");
+  const mainViewParent = mainView.parentElement;
 
   // Wait for the top bar header (an existing Spotify DOM element) to render.
   const topBar = await waitUntilRender("header");
+  const topBarParent = topBar.parentElement;
 
   // If FriendActivity needs to toggle on.
   if (toggleOn) {
-    // Update mainView so that buddyFeed displays on the right side.
-    mainView.style.setProperty("flex-direction", "row");
+    // Update mainViewParent so that buddyFeed displays on the right side.
+    mainViewParent.style.setProperty("flex-direction", "row");
 
     const buddyFeed = document.createElement("div");
-    buddyFeed.classList.add("Root__buddy-feed");
+    buddyFeed.classList.add("buddy-feed");
 
-    // Add buddyFeed as a child of mainView.
-    mainView.appendChild(buddyFeed);
+    // Add buddyFeed as a child of mainViewParent.
+    mainViewParent.appendChild(buddyFeed);
 
     // Inject FriendActivity into buddyFeed.
     render(<FriendActivity />, buddyFeed);
 
-    // Give more space to the right of the topBar for the buddyFeed to take up.
-    topBar.style.setProperty("padding-right", "286px");
+    // Give more space to the right of the topBarParent for the buddyFeed to take up.
+    topBarParent.style.setProperty("margin-right", "270px");
   } else {
     // Else FriendActivity needs to toggle off.
-    const buddyFeed = document.getElementsByClassName("Root__buddy-feed")[0];
+    const buddyFeed = document.getElementsByClassName("buddy-feed")[0];
 
     if (buddyFeed) {
       // Clear custom styling - "flex-direction: column;" will revert back to "flex-direction: row;"
-      mainView.style.removeProperty("flex-direction");
+      mainViewParent.style.removeProperty("flex-direction");
 
       // Remove the buddyFeed element from the DOM.
       buddyFeed.remove();
 
-      // Clear custom styling - "padding-right: 286px;" will revert back to "padding-right: 24px;"
-      topBar.style.removeProperty("padding-right");
+      // Clear custom styling - "margin-right: 270px;" will revert back to "margin-right: 0;"
+      topBarParent.style.removeProperty("margin-right");
     }
   }
 };
