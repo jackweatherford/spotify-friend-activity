@@ -50,11 +50,13 @@ const formatTime = (time) => {
 export const FriendActivity = () => {
   const { friendActivity, loading, refetch } = useFriendActivity();
 
+  const handleRefetch = () => refetch();
+
   return (
     <div class="friend-activity-container">
       <div class="header">
         <h1>Friend activity</h1>
-        <div class="refresh" title="Refresh" onClick={refetch}>
+        <div class="refresh" title="Refresh" onClick={handleRefetch}>
           <RefreshIcon />
         </div>
       </div>
