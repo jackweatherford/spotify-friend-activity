@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Spotify Friend Activity",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "action": {
     "default_icon": {
       "16": "images/sfa16.png",
