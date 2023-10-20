@@ -17,8 +17,7 @@ const toggleFriendActivity = async (toggleOn) => {
   const mainViewParent = mainView.parentElement;
 
   // Wait for the top bar header (an existing Spotify DOM element) to render.
-  const topBar = await waitUntilRender("header");
-  const topBarParent = topBar.parentElement;
+  const topBar = await waitUntilRender("header[data-testid='topbar']");
 
   // If FriendActivity needs to toggle on.
   if (toggleOn) {
@@ -34,8 +33,11 @@ const toggleFriendActivity = async (toggleOn) => {
     // Inject FriendActivity into buddyFeed.
     render(<FriendActivity />, buddyFeed);
 
-    // Give more space to the right of the topBarParent for the buddyFeed to take up.
-    topBarParent.style.setProperty("margin-right", "270px");
+    // Give more space to the right of the topBar for the buddyFeed to take up.
+    topBar.style.setProperty(
+      "padding-right",
+      "calc(270px + var(--content-spacing, 20px))"
+    );
   } else {
     // Else FriendActivity needs to toggle off.
     const buddyFeed = document.getElementsByClassName("buddy-feed")[0];
@@ -47,8 +49,8 @@ const toggleFriendActivity = async (toggleOn) => {
       // Remove the buddyFeed element from the DOM.
       buddyFeed.remove();
 
-      // Clear custom styling - "margin-right: 270px;" will revert back to "margin-right: 0;"
-      topBarParent.style.removeProperty("margin-right");
+      // Clear custom padding from the topBar.
+      topBar.style.removeProperty("padding-right");
     }
   }
 };
