@@ -12,45 +12,59 @@ import { FriendActivity } from "./components/FriendActivity";
  * @param {bool} toggleOn Whether to toggle the FriendActivity on or off.
  */
 const toggleFriendActivity = async (toggleOn) => {
-  // Wait for the .main-view-container div (an existing Spotify DOM element) to render.
-  const mainView = await waitUntilRender(".main-view-container");
-  const mainViewParent = mainView.parentElement;
-
-  // Wait for the top bar header (an existing Spotify DOM element) to render.
-  const topBar = await waitUntilRender("header[data-testid='topbar']");
-
   // If FriendActivity needs to toggle on.
   if (toggleOn) {
-    // Update mainViewParent so that buddyFeed displays on the right side.
-    mainViewParent.style.setProperty("flex-direction", "row");
-
+    // Create the buddy-feed div that will be added to DOM.
     const buddyFeed = document.createElement("div");
     buddyFeed.classList.add("buddy-feed");
 
-    // Add buddyFeed as a child of mainViewParent.
-    mainViewParent.appendChild(buddyFeed);
+    // Wait for Spotify's main grid to render.
+    const mainGrid = await waitUntilRender(
+      "#main>div:first-of-type>div:nth-of-type(2)"
+    );
+
+    // Custom grid areas to add a buddy-feed grid-area.
+    const newGridTemplateAreas =
+      '"global-nav global-nav global-nav global-nav" "left-sidebar main-view right-sidebar buddy-feed" "now-playing-bar now-playing-bar now-playing-bar now-playing-bar"';
+
+    // Wait for Spotify's code to initialize mainGrid's inline styles.
+    await waitUntilAttribute(mainGrid, "style");
+
+    // Update mainGrid's inline styles with the new grid-template-areas.
+    mainGrid.setAttribute(
+      "style",
+      `${mainGrid.getAttribute(
+        "style"
+      )} grid-template-areas: ${newGridTemplateAreas};`
+    );
+
+    // Add buddyFeed to the DOM.
+    mainGrid.appendChild(buddyFeed);
 
     // Inject FriendActivity into buddyFeed.
     render(<FriendActivity />, buddyFeed);
-
-    // Give more space to the right of the topBar for the buddyFeed to take up.
-    topBar.style.setProperty(
-      "padding-right",
-      "calc(270px + var(--content-spacing, 20px))"
-    );
   } else {
     // Else FriendActivity needs to toggle off.
     const buddyFeed = document.getElementsByClassName("buddy-feed")[0];
 
     if (buddyFeed) {
-      // Clear custom styling - "flex-direction: column;" will revert back to "flex-direction: row;"
-      mainViewParent.style.removeProperty("flex-direction");
-
       // Remove the buddyFeed element from the DOM.
       buddyFeed.remove();
 
-      // Clear custom padding from the topBar.
-      topBar.style.removeProperty("padding-right");
+      // Wait for Spotify's main grid to render.
+      const mainGrid = await waitUntilRender(
+        "#main>div:first-of-type>div:nth-of-type(2)"
+      );
+
+      // Revert mainGrid's inline styles to remove the custom grid-template-areas.
+      mainGrid.setAttribute(
+        "style",
+        mainGrid
+          .getAttribute("style")
+          .split(";")
+          .filter((style) => !style.trim().startsWith('grid-template-areas: "'))
+          .join(";")
+      );
     }
   }
 };
@@ -73,6 +87,34 @@ const waitUntilRender = (query) => {
       const element = document.querySelector(query);
       if (element) {
         resolve(element);
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  });
+};
+
+/**
+ * Waits for an element to have a specific attribute defined.
+ * Modified from: https://stackoverflow.com/a/61511955.
+ *
+ * @param {Element} element The html element to check the attribute of.
+ * @param {string} attribute The attribute to check if defined or not.
+ * @returns {Promise} Promise object representing the found element.
+ */
+const waitUntilAttribute = (element, attribute) => {
+  return new Promise((resolve) => {
+    if (element.getAttribute(attribute)) {
+      return resolve();
+    }
+
+    const observer = new MutationObserver(() => {
+      if (element.getAttribute(attribute)) {
+        resolve();
         observer.disconnect();
       }
     });
