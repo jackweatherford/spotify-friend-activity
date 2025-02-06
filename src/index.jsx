@@ -27,15 +27,12 @@ const toggleFriendActivity = async (toggleOn) => {
     const newGridTemplateAreas =
       '"global-nav global-nav global-nav global-nav" "left-sidebar main-view right-sidebar buddy-feed" "now-playing-bar now-playing-bar now-playing-bar now-playing-bar"';
 
-    // Wait for Spotify's code to initialize mainGrid's inline styles.
-    await waitUntilAttribute(mainGrid, "style");
-
     // Update mainGrid's inline styles with the new grid-template-areas.
     mainGrid.setAttribute(
       "style",
-      `${mainGrid.getAttribute(
-        "style"
-      )} grid-template-areas: ${newGridTemplateAreas};`
+      `${
+        mainGrid.getAttribute("style") || ""
+      } grid-template-areas: ${newGridTemplateAreas};`
     );
 
     // Add buddyFeed to the DOM.
@@ -87,34 +84,6 @@ const waitUntilRender = (query) => {
       const element = document.querySelector(query);
       if (element) {
         resolve(element);
-        observer.disconnect();
-      }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-  });
-};
-
-/**
- * Waits for an element to have a specific attribute defined.
- * Modified from: https://stackoverflow.com/a/61511955.
- *
- * @param {Element} element The html element to check the attribute of.
- * @param {string} attribute The attribute to check if defined or not.
- * @returns {Promise} Promise object representing the found element.
- */
-const waitUntilAttribute = (element, attribute) => {
-  return new Promise((resolve) => {
-    if (element.getAttribute(attribute)) {
-      return resolve();
-    }
-
-    const observer = new MutationObserver(() => {
-      if (element.getAttribute(attribute)) {
-        resolve();
         observer.disconnect();
       }
     });
