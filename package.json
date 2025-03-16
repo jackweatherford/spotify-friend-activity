@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "preact": "^10.13.2",
-    "regenerator-runtime": "^0.13.11",
-    "spotify-web-api-node": "^5.0.2"
+    "regenerator-runtime": "^0.13.11"
   }
 }
