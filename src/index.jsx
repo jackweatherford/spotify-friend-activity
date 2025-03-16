@@ -117,7 +117,7 @@ const initDisplay = async () => {
 
 // Listen for ACCESS_TOKEN message event from sfaInterceptor.js.
 window.addEventListener("message", (event) => {
-  if (event.data.type && event.data.type === "ACCESS_TOKEN") {
+  if (event.data.type === "ACCESS_TOKEN") {
     chrome.storage.sync.set({ accessToken: event.data.accessToken });
   }
 });
