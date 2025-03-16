@@ -42,4 +42,4 @@ Add the extension to your browser from the [Chrome Web Store](https://chrome.goo
 
 ## Credits
 
-Made with [preact-chrome-extension-starter](https://github.com/andrewctate/preact-chrome-extension-starter) and [spotify-buddylist](https://github.com/valeriangalliat/spotify-buddylist).
+Made with [preact-chrome-extension-starter](https://github.com/andrewctate/preact-chrome-extension-starter).
