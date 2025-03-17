@@ -2,12 +2,9 @@ import { useState, useEffect } from "preact/hooks";
 
 import { useInterval } from "./useInterval";
 
-// Spotify friend activity API.
-// Ref: https://github.com/valeriangalliat/spotify-buddylist.
-import { getWebAccessToken, getFriendActivity } from "spotify-buddylist";
-
-// Cookie will be populated on Spotify user login.
-let spDcCookie;
+// Spotify API endpoint for fetching friend activity.
+const BUDDYLIST_ENDPOINT =
+  "https://guc-spclient.spotify.com/presence-view/v1/buddylist";
 
 /**
  * @typedef {object} ReturnObject
@@ -26,30 +23,22 @@ export const useFriendActivity = () => {
   const [friendActivity, setFriendActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
-  const [storedAccessToken, setStoredAccessToken] = useState("");
 
   // Setup Spotify API access token and fetch activity on first render.
-  useEffect(async () => {
-    const accessToken = await fetchAccessToken();
-    refetch(accessToken);
+  useEffect(() => {
+    refetch();
   }, []);
 
-  // Poll the API every minute.
+  // Poll the API every minute without showing loading spinner.
   useInterval(() => {
-    fetchFriendActivity();
+    refetch({ updateLoadingState: false });
   }, 60000);
 
-  // Refresh access token every 29 minutes.
-  useInterval(() => {
-    fetchAccessToken();
-  }, 1740000);
-
-  // Fetch access token and update its state.
+  // Fetch Spotify API access token.
   const fetchAccessToken = async () => {
-    // Get Spotify API access token.
     try {
-      const response = await getWebAccessToken(spDcCookie);
-      setStoredAccessToken(response.accessToken);
+      // Get accessToken from browser local storage.
+      const response = await browser.storage.sync.get("accessToken");
       return response.accessToken;
     } catch (e) {
       console.log("[ERROR] [Spotify Friend Activity]", e);
@@ -57,14 +46,17 @@ export const useFriendActivity = () => {
     }
   };
 
-  // Fetch and update state.
+  // Fetch and update friend activity state.
   const fetchFriendActivity = async (accessToken) => {
     // Get Spotify friend activity.
     let friendActivity;
     try {
-      friendActivity = await getFriendActivity(
-        accessToken || storedAccessToken
-      );
+      const res = await fetch(BUDDYLIST_ENDPOINT, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      friendActivity = await res.json();
     } catch (e) {
       console.log(
         "[ERROR] [Spotify Friend Activity] Not logged in to Spotify - couldn't fetch Spotify friend activity"
@@ -72,7 +64,7 @@ export const useFriendActivity = () => {
       setErrors((oldErrors) => [...oldErrors, e]);
     }
 
-    // Update state.
+    // Update friend activity state.
     setFriendActivity(
       friendActivity?.friends
         ? friendActivity.friends.sort((a, b) =>
@@ -83,43 +75,18 @@ export const useFriendActivity = () => {
   };
 
   // Simple refetch function that refetches data and updates loading state accordingly.
-  const refetch = async (accessToken) => {
-    setLoading(true);
+  const refetch = async (refetchOptions = { updateLoadingState: true }) => {
+    if (refetchOptions.updateLoadingState) {
+      setLoading(true);
+    }
+
+    const accessToken = await fetchAccessToken();
     await fetchFriendActivity(accessToken);
-    setLoading(false);
+
+    if (refetchOptions.updateLoadingState) {
+      setLoading(false);
+    }
   };
 
   return { friendActivity, loading, errors, refetch };
 };
-
-// API response shape (friendActivity):
-// [
-//   {
-//     timestamp: {timestamp},
-//     user: {
-//       uri: "spotify:user:{user_id}",
-//       name: "{user_name}",
-//       imageUrl:
-//         "https://i.scdn.co/image/{user_image_id}",
-//     },
-//     track: {
-//       uri: "spotify:track:{track_id}",
-//       name: "{track_name}",
-//       imageUrl:
-//         "http://i.scdn.co/image/{track_image_id}",
-//       album: {
-//         uri: "spotify:album:{album_id}",
-//         name: "{album_name}",
-//       },
-//       artist: {
-//         uri: "spotify:artist:{artist_id}",
-//         name: "{artist_name}",
-//       },
-//       context: {
-//         uri: "spotify:{context_type}:{context_id}",
-//         name: "{context_name}",
-//         index: {tack_index_within_context},
-//       },
-//     },
-//   },
-// ];

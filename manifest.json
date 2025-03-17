@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Spotify Friend Activity",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "page_action": {
     "default_icon": {
       "16": "images/sfa16.png",
@@ -21,11 +21,23 @@
     {
       "matches": ["https://open.spotify.com/*"],
       "js": ["index.js"]
+    },
+    {
+      "matches": ["https://open.spotify.com/*"],
+      "js": ["injectInterceptor.js"],
+      "run_at": "document_start"
     }
   ],
+  "web_accessible_resources": ["sfaInterceptor.js"],
+  "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
   "permissions": [
     "storage",
     "https://open.spotify.com/*",
     "https://guc-spclient.spotify.com/*"
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{df11e835-904c-451f-b2eb-b6b32c3dd0a1}"
+    }
+  }
 }

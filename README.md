@@ -40,4 +40,4 @@ Add the Add-on to your browser from the [Firefox Add-ons Page](https://addons.mo
 
 ## Credits
 
-Made with [preact-chrome-extension-starter](https://github.com/andrewctate/preact-chrome-extension-starter) and [spotify-buddylist](https://github.com/valeriangalliat/spotify-buddylist).
+Made with [preact-chrome-extension-starter](https://github.com/andrewctate/preact-chrome-extension-starter).
