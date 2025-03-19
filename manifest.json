@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Spotify Friend Activity",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "page_action": {
     "default_icon": {
       "16": "images/sfa16.png",
@@ -29,7 +29,6 @@
     }
   ],
   "web_accessible_resources": ["sfaInterceptor.js"],
-  "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';",
   "permissions": [
     "storage",
     "https://open.spotify.com/*",

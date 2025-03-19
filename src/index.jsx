@@ -115,10 +115,20 @@ const initDisplay = async () => {
   });
 };
 
-// Listen for ACCESS_TOKEN message event from sfaInterceptor.js.
-window.addEventListener("message", (event) => {
-  if (event.data.type === "ACCESS_TOKEN") {
-    browser.storage.sync.set({ accessToken: event.data.accessToken });
+// Listen for message events from sfaInterceptor.js.
+window.addEventListener("message", async (event) => {
+  // If an access token was identified.
+  if (event.data.type === "ACCESS") {
+    // Get the access token incoming from the message event.
+    const incomingAccessToken = event.data.token;
+    // Get the access token currently stored in local storage.
+    const storage = await browser.storage.sync.get("accessToken");
+    const currentAccessToken = storage.accessToken;
+
+    // If the access tokens don't match, then the incoming access token is new.
+    if (incomingAccessToken !== currentAccessToken) {
+      await browser.storage.sync.set({ accessToken: incomingAccessToken });
+    }
   }
 });
 

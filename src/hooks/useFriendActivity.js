@@ -23,13 +23,14 @@ export const useFriendActivity = () => {
   const [friendActivity, setFriendActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
+  console.log(friendActivity)
 
-  // Setup Spotify API access token and fetch activity on first render.
+  // Fetch friend activity on first render.
   useEffect(() => {
-    refetch();
+    firstFetch();
   }, []);
 
-  // Poll the API every minute without showing loading spinner.
+  // Refetch friend activity every minute without showing loading spinner.
   useInterval(() => {
     refetch({ updateLoadingState: false });
   }, 60000);
@@ -38,8 +39,8 @@ export const useFriendActivity = () => {
   const fetchAccessToken = async () => {
     try {
       // Get accessToken from browser local storage.
-      const response = await browser.storage.sync.get("accessToken");
-      return response.accessToken;
+      const storage = await browser.storage.sync.get("accessToken");
+      return storage.accessToken;
     } catch (e) {
       console.log("[ERROR] [Spotify Friend Activity]", e);
       setErrors((oldErrors) => [...oldErrors, e]);
@@ -74,7 +75,19 @@ export const useFriendActivity = () => {
     );
   };
 
-  // Simple refetch function that refetches data and updates loading state accordingly.
+  const firstFetch = async () => {
+    setLoading(true);
+
+    // Wait for Spotify API access token to be intercepted.
+    let storage = await browser.storage.sync.get("accessToken");
+    while (!storage.accessToken) {
+      storage = await browser.storage.sync.get("accessToken");
+    }
+
+    refetch();
+  };
+
+  // Simple refetch function that refetches friend activity and updates loading state accordingly.
   const refetch = async (refetchOptions = { updateLoadingState: true }) => {
     if (refetchOptions.updateLoadingState) {
       setLoading(true);
