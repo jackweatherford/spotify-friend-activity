@@ -1,21 +1,21 @@
-// The endpoint that Spotify uses to get the access token.
-const ACCESS_TOKEN_ENDPOINT = "https://open.spotify.com/get_access_token";
-
 // Override the fetch function to intercept the Spotify API access token.
 window.fetch = new Proxy(window.fetch, {
   apply: (target, that, args) => {
-    // Call the original fetch function.
+    // Call the original fetch function with no alterations.
     const fetchOverride = target.apply(that, args);
 
-    fetchOverride.then(async (res) => {
-      // Only intercept the Spotify API access token.
-      if (res.url.startsWith(ACCESS_TOKEN_ENDPOINT)) {
-        const clonedResponse = res.clone();
-        const resJson = await clonedResponse.json();
-        const accessToken = resJson.accessToken;
+    // After the original fetch function is complete, check for Spotify API access token.
+    fetchOverride.then(async () => {
+      // Extract the authorization header from the request args.
+      const authorizationHeader = args[1]?.headers?.authorization;
 
-        // Send the Spotify API access token to the extension.
-        window.postMessage({ type: "ACCESS_TOKEN", accessToken });
+      // If the authorization header starts with "Bearer", it should also have the Spotify API access token.
+      if (authorizationHeader?.startsWith("Bearer")) {
+        // Send the Spotify API access token to the content script.
+        window.postMessage({
+          type: "ACCESS",
+          token: authorizationHeader.split(" ")[1],
+        });
       }
     });
 
