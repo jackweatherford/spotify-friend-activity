@@ -23,7 +23,6 @@ export const useFriendActivity = () => {
   const [friendActivity, setFriendActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState([]);
-  console.log(friendActivity)
 
   // Fetch friend activity on first render.
   useEffect(() => {
