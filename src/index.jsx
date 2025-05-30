@@ -25,7 +25,7 @@ const toggleFriendActivity = async (toggleOn) => {
 
     // Custom grid areas to add a buddy-feed grid-area.
     const newGridTemplateAreas =
-      '"global-nav global-nav global-nav global-nav" "left-sidebar main-view right-sidebar buddy-feed" "now-playing-bar now-playing-bar now-playing-bar now-playing-bar"';
+      '"top-banner top-banner top-banner top-banner" "global-nav global-nav global-nav global-nav" "left-sidebar main-view right-sidebar buddy-feed" "now-playing-bar now-playing-bar now-playing-bar now-playing-bar"';
 
     // Update mainGrid's inline styles with the new grid-template-areas.
     mainGrid.setAttribute(
