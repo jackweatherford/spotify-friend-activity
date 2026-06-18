@@ -20,7 +20,7 @@ const toggleFriendActivity = async (toggleOn) => {
 
     // Wait for Spotify's main grid to render.
     const mainGrid = await waitUntilRender(
-      "#main>div:first-of-type>div:nth-of-type(2)"
+      "#main>div:first-of-type>div:first-of-type"
     );
 
     // Custom grid areas to add a buddy-feed grid-area.
@@ -58,7 +58,7 @@ const toggleFriendActivity = async (toggleOn) => {
         "style",
         mainGrid
           .getAttribute("style")
-          .split(";")
+          ?.split(";")
           .filter((style) => !style.trim().startsWith('grid-template-areas: "'))
           .join(";")
       );
