@@ -54,7 +54,7 @@ export const FriendActivity = () => {
 
   return (
     <div class="friend-activity-container">
-      <div class="header">
+      <div class="sfa-header">
         <h1>Friend activity</h1>
         <div class="refresh" title="Refresh" onClick={handleRefetch}>
           <RefreshIcon />
@@ -93,7 +93,7 @@ export const FriendActivity = () => {
             return (
               <div class="friend">
                 <a
-                  class="user-icon-container"
+                  class="sfa-user-icon-container"
                   title={`Play ${track.artist.name} ${track.name}`}
                   href={trackURL}
                   target="_blank"
