@@ -40,6 +40,21 @@ const toggleFriendActivity = async (toggleOn) => {
 
     // Inject FriendActivity into buddyFeed.
     render(<FriendActivity />, buddyFeed);
+
+    // Spotify's collapsible NowPlayingView.
+    const nowPlayingView = await waitUntilRender(".NowPlayingView");
+
+    // NowPlayingView's aria-hidden property.
+    const ariaHidden =
+      nowPlayingView.parentNode?.parentNode?.getAttribute("aria-hidden");
+
+    if (ariaHidden === "true") {
+      // NowPlayingView is collapsed, add left padding to buddyFeed.
+      buddyFeed.setAttribute(
+        "style",
+        `${buddyFeed.getAttribute("style") || ""} padding-left: 1rem;`,
+      );
+    }
   } else {
     // Else FriendActivity needs to toggle off.
     const buddyFeed = document.getElementsByClassName("buddy-feed")[0];
@@ -60,7 +75,7 @@ const toggleFriendActivity = async (toggleOn) => {
           .getAttribute("style")
           ?.split(";")
           .filter((style) => !style.trim().startsWith('grid-template-areas: "'))
-          .join(";")
+          .join(";") || "",
       );
     }
   }
@@ -112,6 +127,44 @@ const initDisplay = async () => {
     } else {
       toggleFriendActivity(store.isDisplayed);
     }
+  });
+
+  // Spotify's collapsible NowPlayingView.
+  const nowPlayingView = await waitUntilRender(".NowPlayingView");
+
+  // Observer of Spotify's collapsible NowPlayingView, to determine whether it is collapsed or expanded.
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach(async (mutation) => {
+      // Our buddy feed.
+      const buddyFeed = await waitUntilRender(".buddy-feed");
+
+      // NowPlayingView's aria-hidden property.
+      const ariaHidden = mutation.target.getAttribute("aria-hidden");
+
+      if (ariaHidden === "true") {
+        // NowPlayingView is collapsed, add left padding to buddyFeed.
+        buddyFeed?.setAttribute(
+          "style",
+          `${buddyFeed.getAttribute("style") || ""} padding-left: 1rem;`,
+        );
+      } else {
+        // NowPlayingView is expanded, remove left padding from buddyFeed.
+        buddyFeed?.setAttribute(
+          "style",
+          buddyFeed
+            .getAttribute("style")
+            ?.split(";")
+            .filter((style) => !style.trim().startsWith("padding-left: 1rem"))
+            .join(";") || "",
+        );
+      }
+    });
+  });
+
+  // Observer configuration.
+  observer.observe(nowPlayingView.parentNode?.parentNode, {
+    attributes: true,
+    attributeFilter: ["aria-hidden"],
   });
 };
 
