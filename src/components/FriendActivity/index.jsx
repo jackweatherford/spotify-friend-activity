@@ -6,6 +6,7 @@ import {
   AlbumIcon,
   ArtistIcon,
 } from "../Icons";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 import { useFriendActivity } from "../../hooks/useFriendActivity";
 
@@ -49,11 +50,150 @@ const formatTime = (time) => {
  */
 export const FriendActivity = () => {
   const { friendActivity, loading, refetch } = useFriendActivity();
+  const [panelWidth, setPanelWidth] = useState(270);
+  const [expandOnHover, setExpandOnHover] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [expandedPanelWidth, setExpandedPanelWidth] = useState(270);
+  const friendActivityContainerRef = useRef(null);
+  const panelWidthRef = useRef(270);
+  const expandedPanelWidthRef = useRef(270);
+  const isCollapsedRef = useRef(false);
+
+  useEffect(() => {
+    chrome.storage.sync.get(
+      [
+        "friendActivityWidth",
+        "friendActivityExpandedWidth",
+        "friendActivityCollapsed",
+        "expandFriendActivityOnHover",
+      ],
+      (store) => {
+        if (typeof store.friendActivityWidth === "number") {
+          const savedWidth =
+            store.friendActivityWidth > 74
+              ? store.friendActivityWidth
+              : store.friendActivityExpandedWidth || 270;
+
+          panelWidthRef.current = savedWidth;
+          setPanelWidth(savedWidth);
+        }
+
+        if (typeof store.friendActivityExpandedWidth === "number") {
+          expandedPanelWidthRef.current = store.friendActivityExpandedWidth;
+          setExpandedPanelWidth(store.friendActivityExpandedWidth);
+        }
+
+        setExpandOnHover(store.expandFriendActivityOnHover === true);
+        setIsCollapsed(
+          store.friendActivityCollapsed === undefined
+            ? store.expandFriendActivityOnHover === true ||
+              store.friendActivityWidth <= 74
+            : store.friendActivityCollapsed === true,
+        );
+      },
+    );
+
+    const handleStorageChange = (changes, areaName) => {
+      if (areaName === "sync" && "expandFriendActivityOnHover" in changes) {
+        const shouldExpandOnHover =
+          changes.expandFriendActivityOnHover.newValue === true;
+
+        setExpandOnHover(shouldExpandOnHover);
+        setIsCollapsed(shouldExpandOnHover);
+      }
+    };
+
+    chrome.storage.onChanged.addListener(handleStorageChange);
+    return () => chrome.storage.onChanged.removeListener(handleStorageChange);
+  }, []);
+
+  useEffect(() => {
+    const buddyFeed = friendActivityContainerRef.current?.parentElement;
+
+    if (buddyFeed) {
+      buddyFeed.style.width = `${panelWidth}px`;
+      buddyFeed.style.setProperty(
+        "--expanded-width",
+        "220px",
+      );
+      buddyFeed.classList.toggle("expand-on-hover", isCollapsed);
+    }
+
+    panelWidthRef.current = panelWidth;
+    isCollapsedRef.current = isCollapsed;
+  }, [panelWidth, expandedPanelWidth, isCollapsed]);
+
+  const handleResizeStart = (event) => {
+    event.preventDefault();
+
+    const startX = event.clientX;
+    const startWidth = panelWidth;
+    const minWidth = 74;
+
+    if (isCollapsed) {
+      setIsCollapsed(false);
+    }
+
+    const handleResize = (resizeEvent) => {
+      const nextWidth = Math.max(
+        minWidth,
+        startWidth + startX - resizeEvent.clientX,
+      );
+
+      if (nextWidth > minWidth) {
+        panelWidthRef.current = nextWidth;
+        setPanelWidth(nextWidth);
+        expandedPanelWidthRef.current = nextWidth;
+        setExpandedPanelWidth(nextWidth);
+        isCollapsedRef.current = false;
+        setIsCollapsed(false);
+      } else {
+        isCollapsedRef.current = true;
+        setIsCollapsed(true);
+      }
+    };
+
+    const handleResizeEnd = () => {
+      document.removeEventListener("pointermove", handleResize);
+      document.removeEventListener("pointerup", handleResizeEnd);
+
+      chrome.storage.sync.set({
+        friendActivityWidth: panelWidthRef.current,
+        friendActivityExpandedWidth: expandedPanelWidthRef.current,
+        friendActivityCollapsed: isCollapsedRef.current,
+      });
+    };
+
+    document.addEventListener("pointermove", handleResize);
+    document.addEventListener("pointerup", handleResizeEnd, { once: true });
+  };
+
+  const handleCompactToggle = (event) => {
+    if (event.target.closest("a, .resize-handle")) {
+      return;
+    }
+
+    const nextCollapsedState = !isCollapsed;
+    isCollapsedRef.current = nextCollapsedState;
+    setIsCollapsed(nextCollapsedState);
+    chrome.storage.sync.set({ friendActivityCollapsed: nextCollapsedState });
+  };
 
   const handleRefetch = () => refetch();
 
   return (
-    <div class="friend-activity-container">
+    <div
+      class="friend-activity-container"
+      ref={friendActivityContainerRef}
+      onClick={handleCompactToggle}
+    >
+      <div
+        class="resize-handle"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize friend activity"
+        onPointerDown={handleResizeStart}
+      />
       <div class="sfa-header">
         <h1>Friend activity</h1>
         <div class="refresh" title="Refresh" onClick={handleRefetch}>

@@ -3,9 +3,10 @@
 
 // Use Spotify's class naming convention.
 .buddy-feed {
-  background-color: #0003;
+  background-color: var(--background-base, #121212);
 
   width: 270px;
+  min-width: 220px;
 
   // Ensure that the buddy feed's height stays within the bounds of the main grid if it overflows.
   min-height: 0;
@@ -13,18 +14,121 @@
   border-radius: 8px;
 
   grid-area: buddy-feed;
+  position: relative;
+  z-index: 4;
+  transition: width 0.25s ease;
+
+  &.expand-on-hover {
+    width: 74px !important;
+    min-width: 74px;
+    overflow: hidden;
+
+    &:hover {
+      width: var(--expanded-width) !important;
+    }
+
+    .friend-activity-container {
+      box-sizing: border-box;
+      padding: 1rem 0 0;
+
+      .sfa-header {
+        height: 0;
+        margin: 0;
+
+        overflow: hidden;
+        opacity: 0;
+
+        transition: height 0.25s ease, margin 0.25s ease, opacity 0.15s ease;
+
+        h1,
+        .refresh {
+          pointer-events: none;
+        }
+      }
+
+      .friends-list {
+        height: 100%;
+
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        transition: height 0.25s ease;
+
+        .friend .friend-info {
+          display: none;
+        }
+
+        .friend {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    }
+
+    &:hover .friend-activity-container {
+      padding: 1rem 0 0 1rem;
+
+      .sfa-header {
+        height: 1.2rem;
+        justify-content: space-between;
+        margin: 0 1rem 2rem 0;
+
+        opacity: 1;
+
+        h1,
+        .refresh {
+          pointer-events: auto;
+        }
+      }
+
+      .friends-list {
+        height: 90%;
+
+        .friend {
+          width: auto;
+          justify-content: flex-start;
+        }
+
+        .friend .friend-info {
+          display: block;
+        }
+      }
+    }
+  }
 
   .friend-activity-container {
     height: 100%;
+    display: flex;           
+    flex-direction: column;  
+    position: relative;
+    padding: 1rem 1rem 0 1rem;
 
-    padding: 1rem 0 1rem 1rem;
+    .resize-handle {
+      width: 0.375rem;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+
+      cursor: ew-resize;
+      touch-action: none;
+
+      &:hover {
+        background-color: var(--essential-positive, #1ed760);
+        opacity: 0.7;
+      }
+    }
 
     .sfa-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      margin: 0 1rem 2rem 0;
+      flex-shrink: 0;
+      margin: 0 1rem 1rem 0;
 
       h1 {
         font-size: 1rem;
@@ -54,7 +158,8 @@
       // Make friend list scrollable when it overflows.
       overflow-y: auto;
 
-      height: 90%;
+      flex: 1;
+      min-height: 0;
 
       // Loading spinner container.
       .loader-container {
@@ -90,7 +195,11 @@
         align-items: flex-start;
 
         &:not(:last-of-type) {
-          margin-bottom: 1.875rem;
+          margin-bottom: 1rem;
+        }
+
+        &:last-of-type {
+          margin-bottom: 1rem;
         }
 
         .sfa-user-icon-container {
@@ -157,6 +266,7 @@
 
         .friend-info {
           width: 100%;
+          min-width: 0;
 
           margin: 0 1rem 0 0.625rem;
 
@@ -166,7 +276,8 @@
             align-items: center;
 
             .username {
-              max-width: 145px;
+              min-width: 0;
+              flex: 1;
 
               font-size: 0.875rem;
               font-weight: 700;
@@ -187,13 +298,14 @@
             .time {
               font-size: 0.75rem;
 
+              margin-left: 0.5rem;
+              flex-shrink: 0;
+
               cursor: default;
             }
           }
 
           .track-and-artist {
-            max-width: 178px;
-
             display: flex;
             align-items: center;
 
@@ -201,6 +313,8 @@
 
             .track-info {
               display: inline-block;
+              min-width: 0;
+              flex: 0 1 auto;
 
               overflow: hidden;
               text-overflow: ellipsis;
@@ -231,6 +345,8 @@
             color: var(--text-gray, #b3b3b3);
             font-size: 0.75rem;
 
+            min-width: 0;
+
             cursor: pointer;
 
             &:hover {
@@ -238,7 +354,8 @@
             }
 
             .context-name {
-              max-width: 160px;
+              min-width: 0;
+              flex: 1;
 
               display: inline-block;
 
