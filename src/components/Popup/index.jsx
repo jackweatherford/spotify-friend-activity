@@ -12,17 +12,23 @@ import "./popup.scss";
 const Popup = () => {
   // Keep track of the FriendActivity component's display state.
   const [isDisplayed, setIsDisplayed] = useState();
+  const [expandOnHover, setExpandOnHover] = useState(false);
 
   useEffect(() => {
-    // Get isDisplayed from browser local storage.
-    browser.storage.sync.get("isDisplayed", (store) => {
-      // If isDisplayed has never been set. (The user hasn't clicked the "Show friend activity" toggle yet)
-      if (store.isDisplayed === undefined) {
-        setIsDisplayed(true);
-      } else {
-        setIsDisplayed(store.isDisplayed);
-      }
-    });
+    // Get isDisplayed from chrome local storage.
+    browser.storage.sync.get(
+      ["isDisplayed", "expandFriendActivityOnHover"],
+      (store) => {
+        // If isDisplayed has never been set. (The user hasn't clicked the "Show friend activity" toggle yet)
+        if (store.isDisplayed === undefined) {
+          setIsDisplayed(true);
+        } else {
+          setIsDisplayed(store.isDisplayed);
+        }
+
+        setExpandOnHover(store.expandFriendActivityOnHover === true);
+      },
+    );
   }, []);
 
   // "Show friend activity" toggle handler.
@@ -33,6 +39,16 @@ const Popup = () => {
     browser.storage.sync.set({ isDisplayed });
 
     setIsDisplayed(isDisplayed);
+  };
+
+  const handleHoverToggleChange = (event) => {
+    const shouldExpandOnHover = event.target.checked;
+
+    chrome.storage.sync.set({
+      expandFriendActivityOnHover: shouldExpandOnHover,
+    });
+
+    setExpandOnHover(shouldExpandOnHover);
   };
 
   return (
@@ -51,6 +67,17 @@ const Popup = () => {
           </span>
         </label>
       )}
+      <label class="switch">
+        <input
+          type="checkbox"
+          id="friend-activity-hover-toggle"
+          checked={expandOnHover}
+          onChange={handleHoverToggleChange}
+        />
+        <span class="slider">
+          <span class="switch-label">Expand friend activity on hover</span>
+        </span>
+      </label>
       <hr />
       <div class="issue-links">
         <a
