@@ -3,8 +3,8 @@
   "version": "2.4.0",
   "description": "Firefox Add-on to view your friends' activity in Spotify's web player",
   "scripts": {
-    "build": "rm -rf ./dist && webpack && npm run copy:dist",
-    "copy:dist": "cp ./src/components/Popup/popup.html ./src/injectInterceptor.js ./src/sfaInterceptor.js manifest.json ./dist"
+    "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && webpack && npm run copy:dist",
+    "copy:dist": "node -e \"const fs = require('fs'), path = require('path'); ['src/components/Popup/popup.html', 'src/injectInterceptor.js', 'src/sfaInterceptor.js', 'manifest.json'].forEach((file) => fs.copyFileSync(file, path.join('dist', path.basename(file))))\""
   },
   "repository": {
     "type": "git",
