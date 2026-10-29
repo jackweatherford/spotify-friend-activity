@@ -169,7 +169,7 @@ export const FriendActivity = () => {
   };
 
   const handleCompactToggle = (event) => {
-    if (event.target.closest("a, .resize-handle")) {
+    if (event.target.closest("a, .resize-handle, .refresh")) {
       return;
     }
 
