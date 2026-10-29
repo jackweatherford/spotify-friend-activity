@@ -206,12 +206,13 @@ export const FriendActivity = () => {
             <div class="loader"></div>
           </div>
         ) : (
-          friendActivity.map(({ user, track, timestamp }) => {
+          friendActivity.map(({ user, track, timestamp, isPlaying }) => {
             // Seconds since friend's last activity.
             const seconds = Math.round((Date.now() - timestamp) / 1000);
 
-            // Determine online status of friend.
-            const online = seconds <= 300 ? true : false;
+            // Determine online status of friend, guessing from recent activity
+            // when the playing state is unknown (legacy buddylist).
+            const online = isPlaying ?? seconds <= 300;
 
             // Get track ID.
             const trackID = track.uri.split(":").pop();
@@ -231,7 +232,7 @@ export const FriendActivity = () => {
                 : `https://open.spotify.com/track/${trackID}`;
 
             return (
-              <div class="friend">
+              <div class="friend" key={user.uri}>
                 <a
                   class="sfa-user-icon-container"
                   title={`Play ${track.artist.name} ${track.name}`}
@@ -304,12 +305,12 @@ export const FriendActivity = () => {
                     href={contextURL}
                     target="_blank"
                   >
-                    {contextType == "playlist" ? (
-                      <PlaylistIcon />
-                    ) : contextType == "album" ? (
+                    {contextType == "album" ? (
                       <AlbumIcon />
-                    ) : (
+                    ) : contextType == "artist" ? (
                       <ArtistIcon />
+                    ) : (
+                      <PlaylistIcon />
                     )}
                     <span class="context-name">{track.context.name}</span>
                   </a>
