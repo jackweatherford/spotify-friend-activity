@@ -32,7 +32,9 @@
   "permissions": [
     "storage",
     "https://open.spotify.com/*",
-    "https://guc-spclient.spotify.com/*"
+    "https://guc-spclient.spotify.com/*",
+    "https://spclient.wg.spotify.com/*",
+    "https://api.spotify.com/*"
   ],
   "browser_specific_settings": {
     "gecko": {
