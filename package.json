@@ -1,6 +1,6 @@
 {
   "name": "spotify-friend-activity",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "description": "Firefox Add-on to view your friends' activity in Spotify's web player",
   "scripts": {
     "build": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\" && webpack && npm run copy:dist",
